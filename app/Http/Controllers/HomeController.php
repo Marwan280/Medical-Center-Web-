@@ -23,6 +23,7 @@ class HomeController extends Controller
 
     public function laboratories(): View
     {
-        return view('userSelectionPage');
+        return view('lab.auth.login');
     }
+    
 }
