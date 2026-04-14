@@ -49,5 +49,51 @@
     </div>
 </div>
 
+// patient registeration form
+
+<div class="form-group">
+    <label class="form-label">Full Name</label>
+    <input type="text" name="full_name" class="form-input" required>
+</div>
+
+<div class="form-group">
+    <label class="form-label">Email</label>
+    <input type="email" name="email" class="form-input" required>
+</div>
+
+<div class="form-group">
+    <label class="form-label">Phone</label>
+    <input type="text" name="phone" class="form-input">
+</div>
+
+<div class="form-group">
+    <label class="form-label">Date of Birth</label>
+    <input type="date" name="date_of_birth" class="form-input">
+</div>
+
+<div class="form-group">
+    <label class="form-label">Gender</label>
+    <select name="gender" class="form-input">
+        <option value="">Select Gender</option>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+    </select>
+</div>
+
+<div class="form-group">
+    <label class="form-label">Address</label>
+    <textarea name="address" class="form-input"></textarea>
+</div>
+
+<div class="form-group">
+    <label class="form-label">Password</label>
+    <input type="password" name="password" class="form-input" required>
+</div>
+
+<div class="form-group">
+    <label class="form-label">Confirm Password</label>
+    <input type="password" name="password_confirmation" class="form-input" required>
+</div>
+
 </body>
 </html>

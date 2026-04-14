@@ -65,6 +65,7 @@
                     <label class="checkbox-wrapper">
                         <input type="checkbox" name="remember" class="form-checkbox">
                         <span>Remember me</span>
+                        <br>
                         <a href="{{ route('register') }}" class="auth-link">
                          Not registered? Sign up
                         </a>
