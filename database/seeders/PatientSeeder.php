@@ -13,13 +13,16 @@ class PatientSeeder extends Seeder
      */
     public function run(): void
     {
+        // Note: This seeder needs a valid user_id. 
+        // For demo purposes, assuming user with ID 1 exists
         Patient::query()->updateOrCreate(
             ['phone' => '966500000000'],
             [
-                'name' => 'Demo Patient',
-                'password' => 'password123',
-                'must_change_password' => true,
-                'password_changed_at' => null,
+                'user_id' => 1, // Replace with actual user ID
+                'full_name' => 'Demo Patient',
+                'date_of_birth' => '1990-01-01',
+                'gender' => 'male',
+                'address' => 'Demo Address',
             ]
         );
     }
