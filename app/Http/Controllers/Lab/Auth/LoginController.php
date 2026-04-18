@@ -8,45 +8,56 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    // Show login page
     public function showLogin()
     {
-        return view('lab.auth.login'); // resources/views/lab/auth/login.blade.php
+        return view('lab.auth.login');
     }
 
-    // Handle login
     public function login(Request $request)
     {
-        // Validate input
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required', 'string'],
         ]);
 
-        // Remember checkbox
         $remember = $request->boolean('remember');
 
-        // Attempt login
         if (Auth::attempt($credentials, $remember)) {
-            $request->session()->regenerate(); // 🔐 prevents session fixation
+            $request->session()->regenerate();
 
-            return redirect()->intended('/dashboard');
+            $user = Auth::user();
+
+            if ($user->role === 'admin') {
+              return redirect('/admin'); 
+            }
+
+            // if ($user->role === 'doctor') {
+            //     return redirect()->route('doctor.dashboard');
+            // }
+
+            // if ($user->role === 'patient') {
+            //     return redirect()->route('patient.dashboard');
+            // }
+
+            Auth::logout();
+
+            return redirect()->route('login')->withErrors([
+                'email' => 'Invalid user role.',
+            ]);
         }
 
-        // Failed login
         return back()->withErrors([
-            'email' => 'Invalid credentials.',
+            'email' => 'Invalid email or password.',
         ])->onlyInput('email');
     }
 
-    // Logout
     public function logout(Request $request)
     {
         Auth::logout();
 
-        $request->session()->invalidate(); // 🔐 destroy session
+        $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/login');
+        return redirect()->route('login');
     }
 }

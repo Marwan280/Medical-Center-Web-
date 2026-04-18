@@ -43,11 +43,9 @@ Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name(
 
 // Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
 
-// Route::middleware(['auth', 'role:admin'])->group(function () {
-//     Route::get('/admin/dashboard', function () {
-//         return view('admin.dashboard');
-//     })->name('admin.dashboard');
-// });
+Route::middleware(['auth', 'role:admin'])->group(function () {
+  return redirect('/admin');
+});
 
 // Route::middleware(['auth', 'role:doctor'])->group(function () {
 //     Route::get('/doctor/dashboard', function () {

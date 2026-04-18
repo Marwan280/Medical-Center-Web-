@@ -12,7 +12,7 @@
     <div class="auth-wrapper">
         <div class="auth-card">
             <div class="auth-header">
-                <h1 class="auth-title">Welcome Back</h1>
+                <h1 class="auth-title">Welcome Back!</h1>
                 <p class="auth-subtitle">Sign in to your account</p>
             </div>
 

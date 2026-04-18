@@ -10,11 +10,13 @@ class AdminSeeder extends Seeder
 {
     public function run(): void
     {
-        User::create([
-            'name' => 'Admin',
-            'email' => 'admin@medicalcenter.com',
-            'password' => Hash::make('Admin12345'),
-            'role' => 'admin',
-        ]);
+        User::updateOrCreate(
+    ['email' => 'admin@medicalcenter.com'],
+    [
+        'name' => 'Admin',
+        'password' => Hash::make('Admin12345'),
+        'role' => 'admin', 
+    ]
+);
     }
 }
