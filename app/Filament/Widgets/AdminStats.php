@@ -3,19 +3,35 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Appointment;
-use App\Models\Patient;
-use App\Models\User;
-use Filament\Widgets\StatsOverviewWidget as BaseWidget;
+use App\Models\Doctor;
+use App\Models\PatientProfile;
+use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
-class AdminStats extends BaseWidget
+class AdminStats extends StatsOverviewWidget
 {
     protected function getStats(): array
     {
         return [
-            // Stat::make('Doctors', User::where('role', 'doctor')->count()),
-            // Stat::make('Patients', Patient::count()),
-            // Stat::make('Appointments', Appointment::count()),
+            Stat::make('Total Patients', PatientProfile::count())
+                ->description('Registered patient profiles'),
+
+            Stat::make('Total Doctors', Doctor::count())
+                ->description('Available doctors'),
+
+            Stat::make(
+                'Today Appointments',
+                Appointment::query()
+                    ->whereDate('appointment_date', today())
+                    ->count()
+            )->description('Scheduled today'),
+
+            Stat::make(
+                'Pending Appointments',
+                Appointment::query()
+                    ->where('appointment_status', 'pending')
+                    ->count()
+            )->description('Need follow-up'),
         ];
     }
 }
