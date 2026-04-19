@@ -4,15 +4,16 @@ namespace App\Filament\Admin\Resources;
 
 use App\Filament\Admin\Resources\PatientResource\Pages;
 use App\Filament\Admin\Tables\PatientsTable;
-use App\Models\Patient;
+use App\Models\PatientProfile;
 use Filament\Forms;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
+use App\Models\Patient;
 
 class PatientResource extends Resource
 {
-    protected static ?string $model = Patient::class;
+    protected static ?string $model = PatientProfile::class;
 
     protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-users';
     protected static ?string $navigationLabel = 'Patients';
