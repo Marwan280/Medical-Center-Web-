@@ -10,6 +10,7 @@ use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
 
+
 class AppointmentResource extends Resource
 {
     protected static ?string $model = Appointment::class;
