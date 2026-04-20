@@ -2,21 +2,29 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
-use App\Models\Admin;
-use App\Models\Doctor;
-use App\Models\PatientProfile;
 
 class User extends Authenticatable
 {
     use Notifiable;
 
+    protected $table = 'users';
+    protected $primaryKey = 'user_id';
+
     protected $fillable = [
-        'name',
+        'full_name',
+        'phone_number',
         'email',
         'password',
+        'role',
+        'must_change_password',
+        'is_active',
+        'status',
+        'created_by_user_id',
+        'last_login_at',
     ];
 
     protected $hidden = [
@@ -27,19 +35,62 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
+            'must_change_password' => 'boolean',
+            'is_active' => 'boolean',
+            'last_login_at' => 'datetime',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
             'password' => 'hashed',
         ];
     }
 
-    public function patient(): HasOne
+    public function createdBy(): BelongsTo
     {
-        return $this->hasOne(PatientProfile::class);
+        return $this->belongsTo(User::class, 'created_by_user_id', 'user_id');
     }
 
-    public function doctor(): HasOne
+    public function createdUsers(): HasMany
     {
-        return $this->hasOne(Doctor::class);
+        return $this->hasMany(User::class, 'created_by_user_id', 'user_id');
     }
 
+    public function patientProfiles(): HasMany
+    {
+        return $this->hasMany(PatientProfile::class, 'user_id', 'user_id');
+    }
+
+    public function createdPatientProfiles(): HasMany
+    {
+        return $this->hasMany(PatientProfile::class, 'created_by_user_id', 'user_id');
+    }
+
+    public function doctorAppointments(): HasMany
+    {
+        return $this->hasMany(Appointment::class, 'doctor_user_id', 'user_id');
+    }
+
+    public function createdAppointments(): HasMany
+    {
+        return $this->hasMany(Appointment::class, 'created_by_user_id', 'user_id');
+    }
+
+    public function uploadedResultFiles(): HasMany
+    {
+        return $this->hasMany(ResultFile::class, 'doctor_user_id', 'user_id');
+    }
+
+    public function doctorPatientNotes(): HasMany
+    {
+        return $this->hasMany(DoctorPatientNote::class, 'doctor_user_id', 'user_id');
+    }
+
+    public function doctorPersonalNotes(): HasMany
+    {
+        return $this->hasMany(DoctorPersonalNote::class, 'doctor_user_id', 'user_id');
+    }
+
+    public function auditLogs(): HasMany
+    {
+        return $this->hasMany(AuditLog::class, 'actor_user_id', 'user_id');
+    }
 }

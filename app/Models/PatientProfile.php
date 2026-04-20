@@ -9,15 +9,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class PatientProfile extends Model
 {
     protected $table = 'patient_profiles';
-
     protected $primaryKey = 'patient_profile_id';
 
-    public $incrementing = true;
-
-    protected $keyType = 'int';
-
     protected $fillable = [
-        'account_id',
+        'user_id',
         'full_name',
         'gender',
         'date_of_birth',
@@ -26,7 +21,7 @@ class PatientProfile extends Model
         'email',
         'relationship_to_primary',
         'is_primary',
-        'created_by_admin_id',
+        'created_by_user_id',
         'is_active',
     ];
 
@@ -41,14 +36,14 @@ class PatientProfile extends Model
         ];
     }
 
-    public function account(): BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(Account::class, 'account_id', 'account_id');
+        return $this->belongsTo(User::class, 'user_id', 'user_id');
     }
 
-    public function createdByAdmin(): BelongsTo
+    public function createdBy(): BelongsTo
     {
-        return $this->belongsTo(Admin::class, 'created_by_admin_id', 'admin_id');
+        return $this->belongsTo(User::class, 'created_by_user_id', 'user_id');
     }
 
     public function appointments(): HasMany

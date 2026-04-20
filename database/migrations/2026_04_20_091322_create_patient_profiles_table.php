@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('patient_profiles', function (Blueprint $table) {
             $table->id('patient_profile_id');
-            $table->unsignedBigInteger('account_id');
+            $table->unsignedBigInteger('user_id');
             $table->string('full_name');
             $table->enum('gender', ['male', 'female'])->nullable();
             $table->date('date_of_birth')->nullable();
@@ -19,22 +19,22 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->string('relationship_to_primary');
             $table->boolean('is_primary')->default(false);
-            $table->unsignedBigInteger('created_by_admin_id')->nullable();
+            $table->unsignedBigInteger('created_by_user_id')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
 
-            $table->foreign('account_id')
-                ->references('account_id')
-                ->on('accounts')
+            $table->foreign('user_id')
+                ->references('user_id')
+                ->on('users')
                 ->cascadeOnDelete();
 
-            $table->foreign('created_by_admin_id')
-                ->references('admin_id')
-                ->on('admins')
+            $table->foreign('created_by_user_id')
+                ->references('user_id')
+                ->on('users')
                 ->nullOnDelete();
 
-            $table->index('account_id');
-            $table->index('created_by_admin_id');
+            $table->index('user_id');
+            $table->index('created_by_user_id');
         });
     }
 

@@ -19,10 +19,10 @@ Route::get('/laboratories', [HomeController::class, 'laboratories'])->name('labo
 // Authentication Routes
 Route::get('/login', [LoginController::class, 'showLogin'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login.submit');
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
 
-Route::get('/register', [App\Http\Controllers\Lab\Auth\RegisterController::class, 'showRegister'])->name('register');
-Route::post('/register', [App\Http\Controllers\Lab\Auth\RegisterController::class, 'register'])->name('register.submit');
+Route::get('/register', [RegisterController::class, 'showRegister'])->name('register');
+Route::post('/register', [RegisterController::class, 'register'])->name('register.submit');
 
 
 // Password Reset Routes 
@@ -43,8 +43,18 @@ Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name(
 
 // Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
 
-Route::middleware(['auth', 'role:admin'])->group(function () {
-  return redirect('/admin');
+Route::middleware('auth')->group(function () {
+    Route::get('/admin/home', function () {
+        return 'Admin home placeholder';
+    })->name('admin.home');
+
+    Route::get('/doctor/home', function () {
+        return 'Doctor home placeholder';
+    })->name('doctor.home');
+
+    Route::get('/patient/home', function () {
+        return 'Patient home placeholder';
+    })->name('patient.home');
 });
 
 // Route::middleware(['auth', 'role:doctor'])->group(function () {

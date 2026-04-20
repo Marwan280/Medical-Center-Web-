@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Lab\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\Auth\LoginRequest;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
@@ -13,45 +15,48 @@ class LoginController extends Controller
         return view('lab.auth.login');
     }
 
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required', 'string'],
-        ]);
-
+        $validated = $request->validated();
         $remember = $request->boolean('remember');
+        $loginValue = trim($validated['login']);
+        $password = $validated['password'];
 
-        if (Auth::attempt($credentials, $remember)) {
-            $request->session()->regenerate();
+        $loginField = filter_var($loginValue, FILTER_VALIDATE_EMAIL) ? 'email' : 'phone_number';
 
-            $user = Auth::user();
+        $user = User::query()->where($loginField, $loginValue)->first();
 
-            if ($user->role === 'admin') {
-              return redirect('/admin'); 
-            }
-
-            // if ($user->role === 'doctor') {
-            //     return redirect()->route('doctor.dashboard');
-            // }
-
-            // if ($user->role === 'patient') {
-            //     return redirect()->route('patient.dashboard');
-            // }
-
-            Auth::logout();
-
-            return redirect()->route('login')->withErrors([
-                'email' => 'Invalid user role.',
-            ]);
+        if (! $user || ! Hash::check($password, $user->password)) {
+            return back()->withErrors([
+                'login' => 'Invalid email/phone number or password.',
+            ])->onlyInput('login');
         }
 
-        return back()->withErrors([
-            'email' => 'Invalid email or password.',
-        ])->onlyInput('email');
+        if (! $user->is_active || $user->status !== 'active') {
+            return back()->withErrors([
+                'login' => 'Your account is not active. Please contact support.',
+            ])->onlyInput('login');
+        }
+
+        Auth::login($user, $remember);
+        $request->session()->regenerate();
+        $user->forceFill(['last_login_at' => now()])->save();
+
+        // TODO: In future, redirect users with must_change_password=true to password change flow.
+        return match ($user->role) {
+            'admin' => redirect()->route('admin.home'),
+            'doctor' => redirect()->route('doctor.home'),
+            'patient' => redirect()->route('patient.home'),
+            default => (function () {
+                Auth::logout();
+                return redirect()->route('login')->withErrors([
+                    'login' => 'Invalid email/phone number or password.',
+                ]);
+            })(),
+        };
     }
 
-    public function logout(Request $request)
+    public function logout(\Illuminate\Http\Request $request)
     {
         Auth::logout();
 

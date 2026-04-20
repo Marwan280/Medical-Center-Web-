@@ -36,15 +36,15 @@
                 @csrf
 
                 <div class="form-group">
-                    <label for="email" class="form-label">Email Address</label>
+                    <label for="login" class="form-label">Email or Phone Number</label>
                     <input
-                        type="email"
-                        id="email"
-                        name="email"
+                        type="text"
+                        id="login"
+                        name="login"
                         class="form-input"
-                        value="{{ old('email') }}"
+                        value="{{ old('login') }}"
                         required
-                        autocomplete="email"
+                        autocomplete="username"
                         autofocus
                     >
                 </div>
@@ -61,27 +61,15 @@
                     >
                 </div>
 
-                <div class="form-row">
-                    <label class="checkbox-wrapper">
-                        <input type="checkbox" name="remember" class="form-checkbox">
-                        <span>Remember me</span>
-                        <br>
-                        <a href="{{ route('register') }}" class="auth-link">
-                         Not registered? Sign up
-                        </a>
-                    </label>
-
-                    @if (Route::has('password.request'))
-                        <a href="{{ route('password.request') }}" class="auth-link">Forgot password?</a>
-                    @endif
-                </div>
-                
-                
-
                 <button type="submit" class="btn btn-primary btn-block">
                     Login
                 </button>
             </form>
+
+            <p style="margin-top: 15px; text-align: center;">
+                Not registered?
+                <a href="{{ route('register') }}" class="auth-link">Sign up</a>
+            </p>
         </div>
     </div>
 </body>

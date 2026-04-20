@@ -9,24 +9,17 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Appointment extends Model
 {
     protected $table = 'appointments';
-
     protected $primaryKey = 'appointment_id';
-
-    public $incrementing = true;
-
-    protected $keyType = 'int';
 
     protected $fillable = [
         'patient_profile_id',
-        'doctor_id',
+        'doctor_user_id',
         'appointment_type',
         'appointment_status',
         'appointment_date',
         'appointment_time',
         'home_visit_address',
-        'created_by_type',
-        'created_by_account_id',
-        'created_by_admin_id',
+        'created_by_user_id',
         'notes',
     ];
 
@@ -34,7 +27,7 @@ class Appointment extends Model
     {
         return [
             'appointment_date' => 'date',
-            'appointment_time' => 'datetime',
+            'appointment_time' => 'datetime:H:i',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];
@@ -47,17 +40,12 @@ class Appointment extends Model
 
     public function doctor(): BelongsTo
     {
-        return $this->belongsTo(Doctor::class, 'doctor_id', 'doctor_id');
+        return $this->belongsTo(User::class, 'doctor_user_id', 'user_id');
     }
 
-    public function createdByAccount(): BelongsTo
+    public function createdBy(): BelongsTo
     {
-        return $this->belongsTo(Account::class, 'created_by_account_id', 'account_id');
-    }
-
-    public function createdByAdmin(): BelongsTo
-    {
-        return $this->belongsTo(Admin::class, 'created_by_admin_id', 'admin_id');
+        return $this->belongsTo(User::class, 'created_by_user_id', 'user_id');
     }
 
     public function resultFiles(): HasMany

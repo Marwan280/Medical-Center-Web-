@@ -11,17 +11,14 @@ return new class extends Migration
         Schema::create('result_files', function (Blueprint $table) {
             $table->id('result_file_id');
             $table->unsignedBigInteger('appointment_id');
-            $table->unsignedBigInteger('doctor_id');
-
+            $table->unsignedBigInteger('doctor_user_id');
             $table->string('test_name');
             $table->string('file_name');
             $table->string('file_path');
             $table->string('mime_type')->nullable();
             $table->unsignedBigInteger('file_size')->nullable();
-
             $table->boolean('is_latest')->default(true);
             $table->unsignedBigInteger('replaced_result_file_id')->nullable();
-
             $table->timestamp('uploaded_at')->useCurrent();
             $table->timestamp('updated_at')->nullable();
 
@@ -30,9 +27,9 @@ return new class extends Migration
                 ->on('appointments')
                 ->cascadeOnDelete();
 
-            $table->foreign('doctor_id')
-                ->references('doctor_id')
-                ->on('doctors')
+            $table->foreign('doctor_user_id')
+                ->references('user_id')
+                ->on('users')
                 ->restrictOnDelete();
 
             $table->foreign('replaced_result_file_id')
@@ -41,9 +38,8 @@ return new class extends Migration
                 ->nullOnDelete();
 
             $table->index('appointment_id');
-            $table->index('doctor_id');
+            $table->index('doctor_user_id');
             $table->index('replaced_result_file_id');
-            $table->index(['appointment_id', 'is_latest']);
         });
     }
 
