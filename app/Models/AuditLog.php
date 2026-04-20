@@ -8,24 +8,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class AuditLog extends Model
 {
     protected $table = 'audit_logs';
-
     protected $primaryKey = 'audit_log_id';
-
-    public $incrementing = true;
-
-    protected $keyType = 'int';
-
-    const UPDATED_AT = null;
+    public $timestamps = false;
 
     protected $fillable = [
+        'actor_user_id',
         'actor_type',
-        'actor_account_id',
-        'actor_doctor_id',
-        'actor_admin_id',
         'action_type',
         'entity_type',
         'entity_id',
         'action_details',
+        'created_at',
     ];
 
     protected function casts(): array
@@ -35,18 +28,8 @@ class AuditLog extends Model
         ];
     }
 
-    public function actorAccount(): BelongsTo
+    public function actorUser(): BelongsTo
     {
-        return $this->belongsTo(Account::class, 'actor_account_id', 'account_id');
-    }
-
-    public function actorDoctor(): BelongsTo
-    {
-        return $this->belongsTo(Doctor::class, 'actor_doctor_id', 'doctor_id');
-    }
-
-    public function actorAdmin(): BelongsTo
-    {
-        return $this->belongsTo(Admin::class, 'actor_admin_id', 'admin_id');
+        return $this->belongsTo(User::class, 'actor_user_id', 'user_id');
     }
 }

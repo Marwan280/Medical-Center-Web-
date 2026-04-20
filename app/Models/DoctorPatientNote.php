@@ -8,15 +8,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class DoctorPatientNote extends Model
 {
     protected $table = 'doctor_patient_notes';
-
     protected $primaryKey = 'doctor_patient_note_id';
 
-    public $incrementing = true;
-
-    protected $keyType = 'int';
-
     protected $fillable = [
-        'doctor_id',
+        'doctor_user_id',
         'patient_profile_id',
         'note_title',
         'note_body',
@@ -32,7 +27,7 @@ class DoctorPatientNote extends Model
 
     public function doctor(): BelongsTo
     {
-        return $this->belongsTo(Doctor::class, 'doctor_id', 'doctor_id');
+        return $this->belongsTo(User::class, 'doctor_user_id', 'user_id');
     }
 
     public function patientProfile(): BelongsTo

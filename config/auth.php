@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Patient;
 use App\Models\User;
 
 return [
@@ -20,10 +19,6 @@ return [
         'guard' => env('AUTH_GUARD', 'web'),
         'passwords' => env('AUTH_PASSWORD_BROKER', 'users'),
     ],
-
-    /*
-    | Patient portal uses the `patient` guard (phone + password, session).
-    */
 
     /*
     |--------------------------------------------------------------------------
@@ -46,11 +41,6 @@ return [
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
-        ],
-
-        'patient' => [
-            'driver' => 'session',
-            'provider' => 'patients',
         ],
     ],
 
@@ -75,11 +65,6 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', User::class),
-        ],
-
-        'patients' => [
-            'driver' => 'eloquent',
-            'model' => Patient::class,
         ],
     ],
 

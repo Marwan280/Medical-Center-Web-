@@ -9,18 +9,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class ResultFile extends Model
 {
     protected $table = 'result_files';
-
     protected $primaryKey = 'result_file_id';
-
-    public $incrementing = true;
-
-    protected $keyType = 'int';
-
-    const CREATED_AT = null;
+    public $timestamps = false;
 
     protected $fillable = [
         'appointment_id',
-        'doctor_id',
+        'doctor_user_id',
         'test_name',
         'file_name',
         'file_path',
@@ -29,13 +23,13 @@ class ResultFile extends Model
         'is_latest',
         'replaced_result_file_id',
         'uploaded_at',
+        'updated_at',
     ];
 
     protected function casts(): array
     {
         return [
             'is_latest' => 'boolean',
-            'file_size' => 'integer',
             'uploaded_at' => 'datetime',
             'updated_at' => 'datetime',
         ];
@@ -48,7 +42,7 @@ class ResultFile extends Model
 
     public function doctor(): BelongsTo
     {
-        return $this->belongsTo(Doctor::class, 'doctor_id', 'doctor_id');
+        return $this->belongsTo(User::class, 'doctor_user_id', 'user_id');
     }
 
     public function replacedResultFile(): BelongsTo
