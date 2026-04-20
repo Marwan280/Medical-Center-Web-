@@ -21,6 +21,9 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Filament\Widgets\TodayAppointments;
+use Filament\Enums\ThemeMode;
+use Filament\View\PanelsRenderHook;
+use Illuminate\Support\Facades\Blade;
 
 
 
@@ -34,8 +37,13 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->colors([
                 'primary' => Color::Blue,
-            // ->darkMode(false) // force light mode
+           
             ])
+
+            ->defaultThemeMode(ThemeMode::Light)
+            ->renderHook(
+                PanelsRenderHook::TOPBAR_END,
+            fn (): string => Blade::render('@include("filament.partials.theme-toggle")') )
             ->discoverResources(in: app_path('Filament/Admin/Resources'), for: 'App\Filament\Admin\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([
