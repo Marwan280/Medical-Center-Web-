@@ -12,23 +12,24 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Form;
 use Filament\Forms\Components\TextInput;
-use App\Models\Doctor;
+use Filament\Models\Contracts\HasName;
+
 
 
 class DoctorResource extends Resource
 {
-    protected static ?string $model = Doctor::class;
+    protected static ?string $model = User::class;
 
     protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-user-group';
     protected static ?string $navigationLabel = 'Doctors';
     protected static ?int $navigationSort = 1;
 
     // ✅ Only show users with role = doctor
-    // public static function getEloquentQuery(): Builder
-    // {
-    //     return parent::getEloquentQuery()
-    //         ->where( 'doctor');
-    // }
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->where('role', 'doctor');
+    }
 
     // ✅ Form for creating/editing doctor
     public static function form(Schema $schema): Schema

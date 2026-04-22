@@ -32,30 +32,33 @@ Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink
 Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
 Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
 
-//middleware for role-based access control
-// Route::middleware('guest')->group(function () {
-//     Route::get('/login', [LoginController::class, 'showLogin'])->name('login');
-//     Route::post('/login', [LoginController::class, 'login'])->name('login.submit');
 
-//     Route::get('/register', [RegisterController::class, 'showRegister'])->name('register');
-//     Route::post('/register', [RegisterController::class, 'register'])->name('register.submit');
+Route::middleware(['auth', 'role:admin'])->group(function () {
+  return redirect('/admin');
+});
+
+//admin routes
+// Route::middleware('auth')->group(function () {
+//     Route::get('/admin/dashboard', function () {
+//         return view('admin.dashboard');
+//     })->name('admin.dashboard');
+
+//     Route::get('/admin/users', function () {
+//         return view('admin.users');
+//     })->name('admin.users');
+
 // });
 
-// Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/admin/home', function () {
-        return 'Admin home placeholder';
-    })->name('admin.home');
 
-    Route::get('/doctor/home', function () {
-        return 'Doctor home placeholder';
-    })->name('doctor.home');
+    // Route::get('/doctor/home', function () {
+    //     return 'Doctor home placeholder';
+    // })->name('doctor.home');
 
-    Route::get('/patient/home', function () {
-        return 'Patient home placeholder';
-    })->name('patient.home');
-});
+    // Route::get('/patient/home', function () {
+    //     return 'Patient home placeholder';
+    // })->name('patient.home');
+ 
 
 // Route::middleware(['auth', 'role:doctor'])->group(function () {
 //     Route::get('/doctor/dashboard', function () {

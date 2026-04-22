@@ -3,8 +3,8 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Appointment;
-use App\Models\Doctor;
 use App\Models\PatientProfile;
+use App\Models\User;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
@@ -16,7 +16,7 @@ class AdminStats extends StatsOverviewWidget
             Stat::make('Total Patients', PatientProfile::count())
                 ->description('Registered patient profiles'),
 
-            Stat::make('Total Doctors', Doctor::count())
+            Stat::make('Total Doctors', User::where('role', 'doctor')->count())
                 ->description('Available doctors'),
 
             Stat::make(
