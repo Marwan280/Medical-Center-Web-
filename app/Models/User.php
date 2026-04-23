@@ -6,10 +6,17 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
+use Spatie\Permission\Traits\HasRoles;
+use Filament\Models\Contracts\HasName;
 
-class User extends Authenticatable
+
+
+class User extends Authenticatable implements FilamentUser, HasName
 {
-    use Notifiable;
+   
+
 
     protected $table = 'users';
     protected $primaryKey = 'user_id';
@@ -43,6 +50,24 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+//new methods
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return $panel->getId() === 'admin'
+            && $this->role === 'admin'
+            && $this->is_active
+            && $this->status === 'active';
+    }
+
+    public function getFilamentName(): string
+    {
+        return $this->full_name ?: $this->email ?: 'User';
+    }
+
+    public function getNameAttribute(): string
+    {
+        return $this->full_name ?: $this->email ?: 'User';
+    }   
 
     public function createdBy(): BelongsTo
     {

@@ -11,16 +11,22 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
-use App\Models\Admin;
+use Illuminate\Database\Eloquent\Builder;
+
+
 
 class UserResource extends Resource
 {
-    protected static ?string $model = Admin::class;
+    protected static ?string $model = User::class;
 
     protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $recordTitleAttribute = 'name';
 
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->where('role', 'admin');
+    }
     public static function form(Schema $schema): Schema
     {
         return $schema->components([

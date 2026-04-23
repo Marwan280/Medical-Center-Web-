@@ -8,7 +8,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use App\Models\Admin;
+use App\Models\User;
 
 class UsersTable
 {
@@ -16,7 +16,7 @@ class UsersTable
     {
         return $table
             ->columns([
-                TextColumn::make('name')->searchable()->sortable(),
+                TextColumn::make('full_name')->searchable()->sortable(),
                 TextColumn::make('email')->searchable()->sortable(),
             ])
             ->filters([

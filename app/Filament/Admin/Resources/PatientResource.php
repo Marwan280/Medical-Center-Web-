@@ -9,7 +9,7 @@ use Filament\Forms;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
-use App\Models\Patient;
+
 
 class PatientResource extends Resource
 {

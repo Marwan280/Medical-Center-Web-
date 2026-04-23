@@ -44,9 +44,9 @@ class LoginController extends Controller
 
         // TODO: In future, redirect users with must_change_password=true to password change flow.
         return match ($user->role) {
-            'admin' => redirect()->route('admin.home'),
-            'doctor' => redirect()->route('doctor.home'),
-            'patient' => redirect()->route('patient.home'),
+            'admin' => redirect()->route('filament.admin.pages.dashboard'),
+            'doctor' => redirect()->route('doctor.dashboard'),
+            'patient' => redirect()->route('patient.dashboard'),
             default => (function () {
                 Auth::logout();
                 return redirect()->route('login')->withErrors([
